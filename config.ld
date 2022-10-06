@@ -1,0 +1,11 @@
+project='lua-resty-azure'
+title='Azure SDK for OpenResty'
+description='Azure SDK to interact with Azure services'
+format='discount'
+file='./src/'
+dir='docs'
+readme='README.md'
+sort=true
+sort_modules=true
+all=false
+style='./docs/'

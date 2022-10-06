@@ -1,0 +1,12 @@
+# Dockerfile for release assistance, using Kong Inc. Kong gateway;
+# The Kong version itself it generally insignificant.
+ARG KONG_VERSION=latest
+FROM kong:${KONG_VERSION}-alpine
+
+USER root
+RUN apk add --no-cache gcc musl-dev git zip bash
+WORKDIR /host
+COPY . .
+
+ENTRYPOINT [ "/bin/bash" ]
+CMD [ "-c", "/host/.ci/release.sh" ]
