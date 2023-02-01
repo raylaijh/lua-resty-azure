@@ -38,7 +38,7 @@ describe("Test all Key Vault Certificates interfaces", function()
 
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -62,7 +62,7 @@ describe("Test all Key Vault Certificates interfaces", function()
 
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
