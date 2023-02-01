@@ -1,5 +1,5 @@
 local package_name = "lua-resty-azure"
-local package_version = "1.0.0"
+local package_version = "1.1.0"
 local rockspec_revision = "1"
 local github_account_name = "Kong"
 local github_repo_name = "lua-resty-azure"
