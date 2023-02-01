@@ -29,11 +29,11 @@ function sleep(n)
 end
 
 
-describe("Test all Azure Authentication interfaces", function()
+describe("Azure Authentication interfaces #", function()
   it("Good client-credentials authentication", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -57,10 +57,10 @@ describe("Test all Azure Authentication interfaces", function()
     assert.not_nil(token)
   end)
 
-  it("Overriding SDK-level client-credentials with empty strings", function()
+  it("Overriding SDK-level client-credentials with empty strings should return nil credential", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "",
       client_secret = "",
       tenant_id = "fake_tenant",
@@ -81,7 +81,7 @@ describe("Test all Azure Authentication interfaces", function()
   it("Bad (401) client-credentials authentication", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -103,11 +103,32 @@ describe("Test all Azure Authentication interfaces", function()
   it("Good managed-identity authentication", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
+      instance_metadata_host = "fakeazure:8081",
+    })
+    
+    if not azure_client.credentials then
+      local err = azure_client:authenticate()
+
+      if err then
+        assert.has_no.errors(function() error("error authenticating with azure: " .. err) end)
+      end
+    end
+
+    local ok, token, expiry, err = azure_client.credentials:get()
+
+    if not ok then
+      assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
+    end
+
+    assert.not_nil(token)
+  end)
+
+  it("Good managed-identity authentication overriding default client_id", function()
+    -- get an azure client, override all environment defaults
+    local azure_client = require("resty.azure"):new({
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
-      client_secret = "fake_secret",
-      tenant_id = "fake_tenant",
-      extra_auth_parameters = "?withcode=401",
       instance_metadata_host = "fakeazure:8081",
     })
     
@@ -131,7 +152,7 @@ describe("Test all Azure Authentication interfaces", function()
   it("Bad (401) managed-identity authentication", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -150,41 +171,10 @@ describe("Test all Azure Authentication interfaces", function()
     assert.is_nil(azure_client.credentials)
   end)
 
-  it("Good pod-identity authentication", function()
-    -- NOT IMPLEMENTED YET
-    assert.is_true(true)
-
-    -- -- get an azure client, override all environment defaults
-    -- local azure_client = require("resty.azure"):new({
-    --   auth_base_url = "http://fakeazure:8081/",
-    --   client_id = "fake_client",
-    --   client_secret = "fake_secret",
-    --   tenant_id = "fake_tenant",
-    --   extra_auth_parameters = "?withcode=401",
-    --   instance_metadata_host = "fakeazure:8081/fail",
-    -- })
-    
-    -- if not azure_client.credentials then
-    --   local err = azure_client:authenticate()
-
-    --   if err then
-    --     assert.has_no.errors(function() error("error authenticating with azure: " .. err) end)
-    --   end
-    -- end
-
-    -- local ok, token, expiry, err = azure_client.credentials:get()
-
-    -- if not ok then
-    --   assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
-    -- end
-
-    -- assert.not_nil(token)
-  end)
-
   it("Bad (401) pod-identity authentication", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -206,7 +196,7 @@ describe("Test all Azure Authentication interfaces", function()
   it("Token is same during cache window", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -246,7 +236,7 @@ describe("Test all Azure Authentication interfaces", function()
   it("Token is re-loaded after cache expiry", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",

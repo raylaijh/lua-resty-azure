@@ -24,11 +24,11 @@ function dump(o)
 end
 
 
-describe("Test all Key Vault Secrets interfaces", function()
+describe("Test all Key Vault Secrets interfaces #", function()
   it("Good client-credentials authentication and Good Existing secret", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -50,7 +50,7 @@ describe("Test all Key Vault Secrets interfaces", function()
 
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -71,7 +71,7 @@ describe("Test all Key Vault Secrets interfaces", function()
   it("Good client-credentials authentication and secret not found", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -90,7 +90,7 @@ describe("Test all Key Vault Secrets interfaces", function()
   it("Good instance-metadata credentials with Bad client-credentials authentication and Good Existing secret", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -111,7 +111,7 @@ describe("Test all Key Vault Secrets interfaces", function()
   it("Bad authentication (unauthorized) and Good Existing secret", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -131,7 +131,7 @@ describe("Test all Key Vault Secrets interfaces", function()
   it("Internal Server Error when getting secret with good authentication", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -150,7 +150,7 @@ describe("Test all Key Vault Secrets interfaces", function()
   it("Internal Server Error when getting secret with non-JSON syntax and good authentication", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -169,7 +169,7 @@ describe("Test all Key Vault Secrets interfaces", function()
   it("Internal Server Error when getting secret with bad JSON message format and good authentication", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
@@ -188,7 +188,7 @@ describe("Test all Key Vault Secrets interfaces", function()
   it("Internal Server Error when authenticating", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
-      auth_base_url = "http://fakeazure:8081/",
+      auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
       client_secret = "fake_secret",
       tenant_id = "fake_tenant",
