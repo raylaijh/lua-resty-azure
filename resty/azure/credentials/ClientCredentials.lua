@@ -83,7 +83,11 @@ function ClientCredentials:refresh()
     return false, res.body
   end
 
-  local auth_response = json.decode(res.body)
+  local auth_response, err = json.decode(res.body)
+  if err then
+    ngx.log(ngx.ERR, "cannot parse auth response body")
+    return false, "access token not in response body"
+  end
 
   if not auth_response.access_token then
     ngx.log(ngx.ERR, "access token not in response body")
