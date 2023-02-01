@@ -33,8 +33,7 @@ end
 -- updates credentials.
 -- @return success, or nil+err
 function ManagedIdentityCredentials:refresh()
-  ngx.update_time()
-  local time_now = ngx.now()
+  local time_now = ngx.time()
 
   -- get the token
   -- Single-shot requests use the `request_uri` interface.
