@@ -24,7 +24,6 @@ description = {
 
 dependencies = {
   "lua-resty-http >= 0.16",
-  "lua-cjson >= 2.1.0",
 }
 
 build = {
