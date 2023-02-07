@@ -27,6 +27,7 @@ function AZURE:new(opts)
     -- try each implemented authentication class, find the first one that gives us a token
     for _, class_name in ipairs {
       "ClientCredentials",
+      "WorkloadIdentityCredentials",
       "ManagedIdentityCredentials",
     } do
       local ok, cred_class = xpcall(require, debug.traceback, "resty.azure.credentials." .. class_name)

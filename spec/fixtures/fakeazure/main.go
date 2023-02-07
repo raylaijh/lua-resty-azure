@@ -36,6 +36,7 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/{tenantId}/oauth2/v2.0/token", OAuthTokenPost).Methods("POST")
+	r.HandleFunc("/authority/{tenantId}/oauth2/v2.0/token", OAuthTokenPost).Methods("POST")
 	r.HandleFunc("/keyvault/{vaultName}/secrets/{secretName}", KeyVaultGetSecretDefault).Methods("GET")
 	r.HandleFunc("/keyvault/{vaultName}/secrets/{secretName}/{secretVersion}", KeyVaultGetSecretVersion).Methods("GET")
 	r.HandleFunc("/keyvault/{vaultName}/certificates/{certificateName}", KeyVaultGetCertificateDefault).Methods("GET")

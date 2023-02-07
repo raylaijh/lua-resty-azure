@@ -4,7 +4,7 @@ ARCH:=linux/amd64
 .PHONY: test
 test:
 	@KONG_VERSION=$(KONG_VERSION) pongo run
-	pongo down
+	KONG_VERSION=$(KONG_VERSION) pongo down
 
 .PHONY: release
 #release: test

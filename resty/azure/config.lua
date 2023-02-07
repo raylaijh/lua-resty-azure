@@ -19,10 +19,12 @@ local env_vars = {
   -- cloud
   AZURE_DEFAULTS_LOCATION = { name = "defaults_location", default = nil },
   AZURE_DEFAULTS_KEYVAULT_URI = { name = "defaults_keyvault_uri", default = nil },
-  AZURE_INSTANCE_METADATA_HOST = { name = "instance_metadata_host", default = "169.154.169.254" },
+  AZURE_INSTANCE_METADATA_HOST = { name = "instance_metadata_host", default = "169.254.169.254" },
   AZURE_AUTH_BASE_URL = { name = "auth_base_url", default = nil },
+  AZURE_AUTHORITY_HOST = { name = "authority_host", default = nil },
+  AZURE_FEDERATED_TOKEN_FILE = { name = "federated_token_file", default = nil },
 
-  -- resty
+  -- resty.http
   AZURE_SSL_VERIFY = { name = "ssl_verify", default = true, type = "boolean" },
 }
 
