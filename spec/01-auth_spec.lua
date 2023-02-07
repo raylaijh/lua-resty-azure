@@ -171,26 +171,32 @@ describe("Azure Authentication interfaces #", function()
     assert.is_nil(azure_client.credentials)
   end)
 
-  it("Bad (401) pod-identity authentication", function()
+  it("Good workload-identity authentication", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
       auth_base_url = "http://fakeazure:8081",
       client_id = "fake_client",
-      client_secret = "fake_secret",
       tenant_id = "fake_tenant",
-      extra_auth_parameters = "?withcode=401&withpodidentitycode=401",
       instance_metadata_host = "fakeazure:8081/fail",
+      federated_token_file = "/kong-plugin/spec/fixtures/azure-assertion-token",
+      authority_host = "http://fakeazure:8081/authority/"
     })
     
     if not azure_client.credentials then
       local err = azure_client:authenticate()
 
-      assert.same("no authentication mechanism worked for azure", err)
-    else
-      assert.has_no.errors(function() error("expected azure_client.credentials to be nil before test!") end)
+      if err then
+        assert.has_no.errors(function() error("error authenticating with azure: " .. err) end)
+      end
     end
 
-    assert.is_nil(azure_client.credentials)
+    local ok, token, expiry, err = azure_client.credentials:get()
+
+    if not ok then
+      assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
+    end
+
+    assert.not_nil(token)
   end)
 
   it("Token is same during cache window", function()
