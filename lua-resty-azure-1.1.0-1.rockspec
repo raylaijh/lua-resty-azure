@@ -29,14 +29,14 @@ dependencies = {
 build = {
   type = "builtin",
   modules = {
-    ["resty.azure.init"]                                   = "resty/azure/init.lua",
-    ["resty.azure.config"]                                 = "resty/azure/config.lua",
-    ["resty.azure.request.http.http"]                      = "resty/azure/request/http/http.lua",
-    ["resty.azure.request.http.socket"]                    = "resty/azure/request/http/socket.lua",
-    ["resty.azure.credentials.Credentials"]                = "resty/azure/credentials/Credentials.lua",
-    ["resty.azure.credentials.ClientCredentials"]          = "resty/azure/credentials/ClientCredentials.lua",
-    ["resty.azure.credentials.PodIdentityCredentials"]     = "resty/azure/credentials/PodIdentityCredentials.lua",
-    ["resty.azure.credentials.ManagedIdentityCredentials"] = "resty/azure/credentials/ManagedIdentityCredentials.lua",
-    ["resty.azure.api.keyvault"]                           = "resty/azure/api/keyvault.lua",
+    ["resty.azure.init"]                                        = "resty/azure/init.lua",
+    ["resty.azure.config"]                                      = "resty/azure/config.lua",
+    ["resty.azure.request.http.http"]                           = "resty/azure/request/http/http.lua",
+    ["resty.azure.request.http.socket"]                         = "resty/azure/request/http/socket.lua",
+    ["resty.azure.credentials.Credentials"]                     = "resty/azure/credentials/Credentials.lua",
+    ["resty.azure.credentials.ClientCredentials"]               = "resty/azure/credentials/ClientCredentials.lua",
+    ["resty.azure.credentials.WorkloadIdentityCredentials"]     = "resty/azure/credentials/WorkloadIdentityCredentials.lua",
+    ["resty.azure.credentials.ManagedIdentityCredentials"]      = "resty/azure/credentials/ManagedIdentityCredentials.lua",
+    ["resty.azure.api.keyvault"]                                = "resty/azure/api/keyvault.lua",
   }
 }
