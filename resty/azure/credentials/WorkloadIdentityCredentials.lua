@@ -86,7 +86,7 @@ function WorkloadIdentityCredentials:refresh()
   ngx.update_time()
   local time_now = ngx.now()
 
-  local url = fmt("%s%s/oauth2/token", azure_authority_host, azure_tenant_id)
+  local url = fmt("%s%s/oauth2/v2.0/token", azure_authority_host, azure_tenant_id)
   ngx.log(ngx.WARN, "making jwt-assertion auth POST to ", url)
 
   -- TODO remove hard-coded token audience - support many audiences, depending on the target Azure service
