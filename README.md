@@ -85,3 +85,18 @@ To execute the test suite, start and/or connect to your container runtime and th
 ```sh
 make test
 ```
+
+## Performing a Release
+
+Creating a release requires a connection to a Docker daemon on the local host.
+
+Execute these commands to create a release in GitHub **AND** Luarocks:
+
+```sh
+export LUAROCKS_TOKEN=token-here
+
+# RELEASE_TYPE arg options are "major", "minor", or "patch"
+make release RELEASE_TYPE=major
+
+git push --tags origin main
+```

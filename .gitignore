@@ -3,3 +3,4 @@
 **/.vscode/
 kong-plugin/
 test.lua
+*.src.rock.zip
