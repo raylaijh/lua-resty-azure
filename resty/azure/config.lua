@@ -25,7 +25,7 @@ local env_vars = {
   AZURE_FEDERATED_TOKEN_FILE = { name = "federated_token_file", default = nil },
 
   -- resty.http
-  AZURE_SSL_VERIFY = { name = "ssl_verify", default = true, type = "boolean" },
+  AZURE_SSL_VERIFY = { name = "ssl_verify", default = false, type = "boolean" },
 }
 
 -- populate the env vars with their values, or defaults
