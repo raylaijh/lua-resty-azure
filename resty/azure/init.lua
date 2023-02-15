@@ -51,7 +51,7 @@ function AZURE:new(opts)
 
   -- expose function for simplifying api calls via different sdk classes
   azure_methods.make_request = function(parameters)
-    local httpc = require "resty.azure.request.http.http".new()
+    local httpc = require "resty.luasocket.http".new()
     
     -- validate the request
     if not parameters.url then

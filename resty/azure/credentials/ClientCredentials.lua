@@ -52,7 +52,7 @@ function ClientCredentials:refresh()
 
   -- get the token
   -- Single-shot requests use the `request_uri` interface.
-  local httpc = require "resty.azure.request.http.http".new()
+  local httpc = require "resty.luasocket.http".new()
   ngx.update_time()
   local time_now = ngx.now()
 
