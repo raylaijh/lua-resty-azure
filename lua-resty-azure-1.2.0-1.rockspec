@@ -24,6 +24,7 @@ description = {
 
 dependencies = {
   "lua-resty-http >= 0.16",
+  "lua-resty-luasocket ~> 1",
 }
 
 build = {
@@ -31,8 +32,6 @@ build = {
   modules = {
     ["resty.azure.init"]                                        = "resty/azure/init.lua",
     ["resty.azure.config"]                                      = "resty/azure/config.lua",
-    ["resty.azure.request.http.http"]                           = "resty/azure/request/http/http.lua",
-    ["resty.azure.request.http.socket"]                         = "resty/azure/request/http/socket.lua",
     ["resty.azure.credentials.Credentials"]                     = "resty/azure/credentials/Credentials.lua",
     ["resty.azure.credentials.ClientCredentials"]               = "resty/azure/credentials/ClientCredentials.lua",
     ["resty.azure.credentials.WorkloadIdentityCredentials"]     = "resty/azure/credentials/WorkloadIdentityCredentials.lua",

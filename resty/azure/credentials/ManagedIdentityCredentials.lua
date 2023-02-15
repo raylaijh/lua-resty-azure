@@ -37,7 +37,7 @@ function ManagedIdentityCredentials:refresh()
 
   -- get the token
   -- Single-shot requests use the `request_uri` interface.
-  local httpc = require "resty.azure.request.http.http".new()
+  local httpc = require "resty.luasocket.http".new()
   local instance_metadata_host = self.opts.instance_metadata_host or self.global_config.AZURE_INSTANCE_METADATA_HOST or os.getenv(self.envPrefix .. "_INSTANCE_METADATA_HOST") or os.getenv("AZURE_INSTANCE_METADATA_HOST")
   
   -- offer the option to override the client_id, in case the instance/pod has multiple attached identities

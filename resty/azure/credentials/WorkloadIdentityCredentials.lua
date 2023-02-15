@@ -42,7 +42,7 @@ function WorkloadIdentityCredentials:refresh()
 
   -- use JWT assertion grant to exchange injected serviceaccount token for Azure services bearer
   -- Single-shot requests use the `request_uri` interface.
-  local httpc = require "resty.azure.request.http.http".new()
+  local httpc = require "resty.luasocket.http".new()
   local instance_metadata_host = self.opts.instance_metadata_host or self.global_config.AZURE_INSTANCE_METADATA_HOST or os.getenv(self.envPrefix .. "_INSTANCE_METADATA_HOST") or os.getenv("AZURE_INSTANCE_METADATA_HOST")
   
   -- check for injects env location of assertion token, then check for token presence on disk
@@ -82,7 +82,7 @@ function WorkloadIdentityCredentials:refresh()
     return false, "Couldn't read federated token file from filesystem"
   end
 
-  local httpc = require "resty.azure.request.http.http".new()
+  local httpc = require "resty.luasocket.http".new()
   ngx.update_time()
   local time_now = ngx.now()
 
