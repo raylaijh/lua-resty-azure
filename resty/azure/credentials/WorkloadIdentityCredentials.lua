@@ -94,7 +94,7 @@ function WorkloadIdentityCredentials:refresh()
     url,
     {
       method = "POST",
-      body = fmt("client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&grant_type=client_credentials&client_assertion=%s&scope=https://vault.azure.net/.default", assertion_token),
+      body = fmt("client_id=%s&client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&grant_type=client_credentials&client_assertion=%s&scope=https://vault.azure.net/.default", azure_client_id, assertion_token),
       headers = {
           ["Content-Type"] = "application/x-www-form-urlencoded",
       },
