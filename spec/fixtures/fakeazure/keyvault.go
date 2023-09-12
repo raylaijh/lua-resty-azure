@@ -392,6 +392,10 @@ func KeyVaultGetSecretDefault(w http.ResponseWriter, r *http.Request) {
 	KeyVaultGetSecret(w, r, "9bdcdbefc49446dd9a28e04f55e10340")
 }
 
+func KeyVaultDeleteSecretDefault(w http.ResponseWriter, r *http.Request) {
+	KeyVaultGetSecret(w, r, "9bdcdbefc49446dd9a28e04f55e10340")
+}
+
 func KeyVaultGetSecret(w http.ResponseWriter, r *http.Request, secretVersion string) {
 	vars := mux.Vars(r)
 	secretName, ok := vars["secretName"]

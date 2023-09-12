@@ -38,6 +38,7 @@ func main() {
 	r.HandleFunc("/{tenantId}/oauth2/v2.0/token", OAuthTokenPost).Methods("POST")
 	r.HandleFunc("/authority/{tenantId}/oauth2/v2.0/token", OAuthTokenPost).Methods("POST")
 	r.HandleFunc("/keyvault/{vaultName}/secrets/{secretName}", KeyVaultGetSecretDefault).Methods("GET")
+	r.HandleFunc("/keyvault/{vaultName}/secrets/{secretName}", KeyVaultDeleteSecretDefault).Methods("DELETE")
 	r.HandleFunc("/keyvault/{vaultName}/secrets/{secretName}/{secretVersion}", KeyVaultGetSecretVersion).Methods("GET")
 	r.HandleFunc("/keyvault/{vaultName}/certificates/{certificateName}", KeyVaultGetCertificateDefault).Methods("GET")
 	r.HandleFunc("/keyvault/{vaultName}/certificates/{certificateName}/{certificateVersion}", KeyVaultGetCertificateVersion).Methods("GET")

@@ -32,10 +32,18 @@ build = {
   modules = {
     ["resty.azure.init"]                                        = "resty/azure/init.lua",
     ["resty.azure.config"]                                      = "resty/azure/config.lua",
+    ["resty.azure.utils"]                                       = "resty/azure/utils/init.lua",
     ["resty.azure.credentials.Credentials"]                     = "resty/azure/credentials/Credentials.lua",
     ["resty.azure.credentials.ClientCredentials"]               = "resty/azure/credentials/ClientCredentials.lua",
     ["resty.azure.credentials.WorkloadIdentityCredentials"]     = "resty/azure/credentials/WorkloadIdentityCredentials.lua",
     ["resty.azure.credentials.ManagedIdentityCredentials"]      = "resty/azure/credentials/ManagedIdentityCredentials.lua",
     ["resty.azure.api.keyvault"]                                = "resty/azure/api/keyvault.lua",
+    ["resty.azure.api.secrets"]                                 = "resty/azure/api/secrets.lua",
+    ["resty.azure.api.keys"]                                    = "resty/azure/api/keys.lua",
+    ["resty.azure.api.certificates"]                            = "resty/azure/api/certificates.lua",
+    ["resty.azure.api.auth"]                                    = "resty/azure/api/auth/init.lua",
+    ["resty.azure.api.request.build"]                           = "resty/azure/api/request/build.lua",
+    ["resty.azure.api.request.execute"]                         = "resty/azure/api/request/execute.lua",
+    ["resty.azure.api.response.handle"]                         = "resty/azure/api/response/handle.lua",
   }
 }
