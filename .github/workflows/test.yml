@@ -1,0 +1,36 @@
+name: Tests
+
+on:
+  pull_request: {}
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  tests:
+    name: Unit and Integration tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Kong source code
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        # token: ${{ github.token }}
+    - name: Checkout pongo
+      uses: actions/checkout@v3
+      with:
+        repository: Kong/kong-pongo
+        path: kong-pongo
+        ref: 2.7.0
+        # token: ${{ github.token }}
+    - name: Install pongo
+      run: |
+        ln -s $(realpath kong-pongo/pongo.sh) /usr/local/bin/pongo
+    - name: Tests
+      run: |
+        pongo run
