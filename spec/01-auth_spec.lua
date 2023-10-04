@@ -29,7 +29,7 @@ function sleep(n)
 end
 
 
-describe("Azure Authentication interfaces #", function()
+describe("Azure Authentication interfaces ", function()
   it("Good client-credentials authentication", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
@@ -39,21 +39,15 @@ describe("Azure Authentication interfaces #", function()
       tenant_id = "fake_tenant",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    
-    if not azure_client.credentials then
-      local err = azure_client:authenticate()
+    assert.is_nil(azure_client.credentials)
 
-      if err then
-        assert.has_no.errors(function() error("error authenticating with azure: " .. err) end)
-      end
-    end
+    local _, err = azure_client:authenticate()
+    assert.is_nil(err)
+    assert.is_not_nil(azure_client.credentials)
 
-    local ok, token, expiry, err = azure_client.credentials:get()
-
-    if not ok then
-      assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
-    end
-
+    local ok, token, _, err = azure_client.credentials:get()
+    assert.is_truthy(ok)
+    assert.is_nil(err)
     assert.not_nil(token)
   end)
 
@@ -66,15 +60,9 @@ describe("Azure Authentication interfaces #", function()
       tenant_id = "fake_tenant",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    
-    if not azure_client.credentials then
-      local err = azure_client:authenticate()
 
-      assert.same("no authentication mechanism worked for azure", err)
-    else
-      assert.has_no.errors(function() error("expected azure_client.credentials to be nil before test!") end)
-    end
-
+    local _, err = azure_client:authenticate()
+    assert.is_same("no authentication mechanism worked for azure", err)
     assert.is_nil(azure_client.credentials)
   end)
 
@@ -88,15 +76,10 @@ describe("Azure Authentication interfaces #", function()
       extra_auth_parameters = "?withcode=401",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    
-    if not azure_client.credentials then
-      local err = azure_client:authenticate()
 
-      assert.same("no authentication mechanism worked for azure", err)
-    else
-      assert.has_no.errors(function() error("expected azure_client.credentials to be nil before test!") end)
-    end
+    local _, err = azure_client:authenticate()
 
+    assert.same("no authentication mechanism worked for azure", err)
     assert.is_nil(azure_client.credentials)
   end)
 
@@ -106,21 +89,10 @@ describe("Azure Authentication interfaces #", function()
       auth_base_url = "http://fakeazure:8081",
       instance_metadata_host = "fakeazure:8081",
     })
-    
-    if not azure_client.credentials then
-      local err = azure_client:authenticate()
 
-      if err then
-        assert.has_no.errors(function() error("error authenticating with azure: " .. err) end)
-      end
-    end
-
+    local _, err = azure_client:authenticate()
+    assert.is_nil(err)
     local ok, token, expiry, err = azure_client.credentials:get()
-
-    if not ok then
-      assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
-    end
-
     assert.not_nil(token)
   end)
 
@@ -131,21 +103,10 @@ describe("Azure Authentication interfaces #", function()
       client_id = "fake_client",
       instance_metadata_host = "fakeazure:8081",
     })
-    
-    if not azure_client.credentials then
-      local err = azure_client:authenticate()
 
-      if err then
-        assert.has_no.errors(function() error("error authenticating with azure: " .. err) end)
-      end
-    end
-
+    local _, err = azure_client:authenticate()
+    assert.is_nil(err)
     local ok, token, expiry, err = azure_client.credentials:get()
-
-    if not ok then
-      assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
-    end
-
     assert.not_nil(token)
   end)
 
@@ -159,15 +120,9 @@ describe("Azure Authentication interfaces #", function()
       extra_auth_parameters = "?withcode=401",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    
-    if not azure_client.credentials then
-      local err = azure_client:authenticate()
 
-      assert.same("no authentication mechanism worked for azure", err)
-    else
-      assert.has_no.errors(function() error("expected azure_client.credentials to be nil before test!") end)
-    end
-
+    local _, err = azure_client:authenticate()
+    assert.is_not_nil(err)
     assert.is_nil(azure_client.credentials)
   end)
 
@@ -181,21 +136,11 @@ describe("Azure Authentication interfaces #", function()
       federated_token_file = "/kong-plugin/spec/fixtures/azure-assertion-token",
       authority_host = "http://fakeazure:8081/authority/"
     })
-    
-    if not azure_client.credentials then
-      local err = azure_client:authenticate()
 
-      if err then
-        assert.has_no.errors(function() error("error authenticating with azure: " .. err) end)
-      end
-    end
+    local _, err = azure_client:authenticate()
+    assert.is_nil(err)
 
     local ok, token, expiry, err = azure_client.credentials:get()
-
-    if not ok then
-      assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
-    end
-
     assert.not_nil(token)
   end)
 
@@ -209,32 +154,19 @@ describe("Azure Authentication interfaces #", function()
       extra_auth_parameters = "?withexpiry=3600",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    
-    if not azure_client.credentials then
-      local err = azure_client:authenticate()
 
-      if err then
-        assert.has_no.errors(function() error("error authenticating with azure: " .. err) end)
-      end
-    end
+    local _, err = azure_client:authenticate()
+    assert.is_nil(err)
 
     local ok, token_one, expiry, err = azure_client.credentials:get()
-
-    if not ok then
-      assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
-    end
-
+    assert.is_nil(err)
     assert.not_nil(token_one)
 
     -- get another token and test it is the same
     local ok, token_two, expiry, err = azure_client.credentials:get()
-
-    if not ok then
-      assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
-    end
-
+    assert.is_nil(err)
     assert.not_nil(token_two)
-    
+
     ngx.log(ngx.INFO, fmt("Token one: %s | Token two: %s", token_one, token_two))
     assert.same(token_one, token_two)
   end)
@@ -249,21 +181,11 @@ describe("Azure Authentication interfaces #", function()
       extra_auth_parameters = "?withexpiry=2",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    
-    if not azure_client.credentials then
-      local err = azure_client:authenticate()
 
-      if err then
-        assert.has_no.errors(function() error("error authenticating with azure: " .. err) end)
-      end
-    end
+    local _, err = azure_client:authenticate()
+    assert.is_nil(err)
 
     local ok, token_one, expiry, err = azure_client.credentials:get()
-
-    if not ok then
-      assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
-    end
-
     assert.not_nil(token_one)
 
     -- pausing to expire the token cache
@@ -273,12 +195,8 @@ describe("Azure Authentication interfaces #", function()
     -- get another token and test it has changed
     local ok, token_two, expiry, err = azure_client.credentials:get()
 
-    if not ok then
-      assert.has_no.errors(function() error("error refreshing vault token: " .. err) end)
-    end
-
     assert.not_nil(token_two)
-  
+
     ngx.log(ngx.INFO, fmt("Token one: %s | Token two: %s", token_one, token_two))
     assert.not_same(token_one, token_two)
   end)

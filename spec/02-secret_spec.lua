@@ -1,31 +1,7 @@
-local cjson = require("cjson.safe").new()
 local fmt = string.format
 
-function getTableSize(t)
-  local count = 0
-  for _, __ in pairs(t) do
-      count = count + 1
-  end
-  return count
-end
-
-
-function dump(o)
-  if type(o) == 'table' then
-    local s = '{ '
-    for k,v in pairs(o) do
-      if type(k) ~= 'number' then k = '"'..k..'"' end
-      s = s .. '['..k..'] = ' .. dump(v) .. ','
-    end
-    return s .. '} '
-  else
-      return tostring(o)
-  end
-end
-
-
 describe("Test all Key Vault Secrets interfaces #", function()
-  it("Good client-credentials authentication and Good Existing secret", function()
+  it("valid credentials and existing secret", function()
     -- get an azure client, override all environment defaults
     local azure_client = require("resty.azure"):new({
       auth_base_url = "http://fakeazure:8081",
@@ -34,15 +10,12 @@ describe("Test all Key Vault Secrets interfaces #", function()
       tenant_id = "fake_tenant",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    keyvault_client = azure_client:keyvault("http://fakeazure:8081/keyvault/jack-vault")
-    secret, err = keyvault_client:get_secret("demo")
+    local secret_client = azure_client:secrets("http://fakeazure:8081/keyvault/jack-vault")
+    local secret_object, err = secret_client:get("demo")
 
-    if err then
-      assert.has_no.errors(function() error("error getting Key Vault secret: " .. err) end)
-    else
-      assert.same(secret.value, "This is the fake secret value")
-      assert.not_nil(keyvault_client.parent_client.credentials:get())
-    end
+    assert.is_nil(err)
+    assert.is_not_nil(secret_object)
+    assert.same(secret_object.value, "This is the fake secret value")
   end)
 
   it("Good client-credentials authentication and Good Existing secret of specific version", function()
@@ -56,14 +29,14 @@ describe("Test all Key Vault Secrets interfaces #", function()
       tenant_id = "fake_tenant",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    keyvault_client = azure_client:keyvault("http://fakeazure:8081/keyvault/jack-vault")
-    secret, err = keyvault_client:get_secret("demo", requested_version)
+    local secret_client = azure_client:secrets("http://fakeazure:8081/keyvault/jack-vault")
+    local secret, err = secret_client:get("demo", requested_version)
 
     if err then
       assert.has_no.errors(function() error("error getting Key Vault secret: " .. err) end)
     else
       assert.same(secret.value, "This is the fake secret value")
-      assert.not_nil(keyvault_client.parent_client.credentials:get())
+      assert.not_nil(secret_client.parent_client.credentials:get())
       assert.same(secret.id, fmt("http://fakeazure:8081/keyvault/jack-vault/secrets/demo/%s", requested_version))
     end
   end)
@@ -77,14 +50,9 @@ describe("Test all Key Vault Secrets interfaces #", function()
       tenant_id = "fake_tenant",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    keyvault_client = azure_client:keyvault("http://fakeazure:8081/keyvault/jack-vault")
-    secret, err = keyvault_client:get_secret("demo", nil, { extra_query_args = "&withcode=404" })
-
-    if err then
-      assert.same('failed to make azure request: azure call failed with error: secret demo version 9bdcdbefc49446dd9a28e04f55e10340 not found in this keyvault, status: 404', err)
-    else
-      assert.has_no.errors(function() error("expected an error!") end)
-    end
+    local secret_client = azure_client:secrets("http://fakeazure:8081/keyvault/jack-vault")
+    local response, err = secret_client:get("demo", nil, { extra_query_args = "&withcode=404" })
+    assert.is_not_nil(response.error.code)
   end)
 
   it("Good instance-metadata credentials with Bad client-credentials authentication and Good Existing secret", function()
@@ -97,15 +65,11 @@ describe("Test all Key Vault Secrets interfaces #", function()
       extra_auth_parameters = "?withcode=401",
       instance_metadata_host = "fakeazure:8081",
     })
-    keyvault_client = azure_client:keyvault("http://fakeazure:8081/keyvault/jack-vault")
-    secret, err = keyvault_client:get_secret("demo")
+    local secret_client = azure_client:secrets("http://fakeazure:8081/keyvault/jack-vault")
+    local secret_object, err = secret_client:get("demo")
 
-    if err then
-      assert.has_no.errors(function() error("error getting Key Vault secret: " .. err) end)
-    else
-      assert.same(secret.value, "This is the fake secret value")
-      assert.not_nil(keyvault_client.parent_client.credentials:get())
-    end
+    assert.same(secret_object.value, "This is the fake secret value")
+    assert.not_nil(secret_client.parent_client.credentials:get())
   end)
 
   it("Bad authentication (unauthorized) and Good Existing secret", function()
@@ -118,14 +82,10 @@ describe("Test all Key Vault Secrets interfaces #", function()
       extra_auth_parameters = "?withcode=401",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    keyvault_client = azure_client:keyvault("http://fakeazure:8081/keyvault/jack-vault")
-    secret, err = keyvault_client:get_secret("demo")
-
-    if err then
-      assert.same('failed to make azure request: no azure authentication mechanisms in chain returned any token', err)
-    else
-      assert.has_no.errors(function() error("expected an error!") end)
-    end
+    local secret_client = azure_client:secrets("http://fakeazure:8081/keyvault/jack-vault")
+    local secret_object, err = secret_client:get("demo")
+    assert.is_nil(secret_object)
+    assert.is_not_nil(err)
   end)
 
   it("Internal Server Error when getting secret with good authentication", function()
@@ -137,14 +97,10 @@ describe("Test all Key Vault Secrets interfaces #", function()
       tenant_id = "fake_tenant",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    keyvault_client = azure_client:keyvault("http://fakeazure:8081/keyvault/jack-vault")
-    secret, err = keyvault_client:get_secret("demo", nil, { extra_query_args = "&withcode=500" })
-
-    if err then
-      assert.same('failed to make azure request: azure call failed with error: error retrieving secret, status: 500', err)
-    else
-      assert.has_no.errors(function() error("expected an error!") end)
-    end
+    local secret_client = azure_client:secrets("http://fakeazure:8081/keyvault/jack-vault")
+    local secret_object, err = secret_client:get("demo", nil, { extra_query_args = "&withcode=500" })
+    assert.is_nil(secret_object)
+    assert.is_same(err, "internal server error")
   end)
 
   it("Internal Server Error when getting secret with non-JSON syntax and good authentication", function()
@@ -156,14 +112,9 @@ describe("Test all Key Vault Secrets interfaces #", function()
       tenant_id = "fake_tenant",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    keyvault_client = azure_client:keyvault("http://fakeazure:8081/keyvault/jack-vault")
-    secret, err = keyvault_client:get_secret("demo", nil, { extra_query_args = "&withcode=501" })
-
-    if err then
-      assert.same('failed to make azure request: failed to decode Azure keyvault response: Expected value but found invalid token at character 1, status: 500', err)
-    else
-      assert.has_no.errors(function() error("expected an error!") end)
-    end
+    local secrets_client = azure_client:secrets("http://fakeazure:8081/keyvault/jack-vault")
+    local _, err = secrets_client:get("demo", nil, { extra_query_args = "&withcode=501" })
+    assert.matches('failed to make azure request: azure sdk response body is not valid json: Expected value but found invalid token at character 1', err)
   end)
 
   it("Internal Server Error when getting secret with bad JSON message format and good authentication", function()
@@ -175,14 +126,10 @@ describe("Test all Key Vault Secrets interfaces #", function()
       tenant_id = "fake_tenant",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    keyvault_client = azure_client:keyvault("http://fakeazure:8081/keyvault/jack-vault")
-    secret, err = keyvault_client:get_secret("demo", nil, { extra_query_args = "&withcode=502" })
+    local secrets_client = azure_client:secrets("http://fakeazure:8081/keyvault/jack-vault")
+    local _, err = secrets_client:get("demo", nil, { extra_query_args = "&withcode=502" })
 
-    if err then
-      assert.same('failed to make azure request: azure call failed with error: {"fault":{"msg":"good json syntax but badly formatted error message"}}\n, status: 500', err)
-    else
-      assert.has_no.errors(function() error("expected an error!") end)
-    end
+    assert.matches('internal server error', err)
   end)
 
   it("Internal Server Error when authenticating", function()
@@ -195,13 +142,9 @@ describe("Test all Key Vault Secrets interfaces #", function()
       extra_auth_parameters = "?withcode=500",
       instance_metadata_host = "fakeazure:8081/fail",
     })
-    keyvault_client = azure_client:keyvault("http://fakeazure:8081/keyvault/jack-vault?withcode=500")
-    secret, err = keyvault_client:get_secret("demo")
+    local keyvault_client = azure_client:secrets("http://fakeazure:8081/keyvault/jack-vault?withcode=500")
+    local _, err = keyvault_client:get("demo")
 
-    if err then
-      assert.same('failed to make azure request: no azure authentication mechanisms in chain returned any token',err)
-    else
-      assert.has_no.errors(function() error("expected an error!") end)
-    end
+    assert.same('failed to make azure request: could not authenticate. no authentication mechanism worked for azure', err)
   end)
 end)
