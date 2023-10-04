@@ -1,3 +1,4 @@
+testing
 # Lua Resty Azure
 
 Lua library (based on the resty framework) for Azure authentication and tools. Much of the code is written with the [Azure SDK for Python](https://github.com/Azure/azure-sdk-for-python) as its reference, which in turn uses Autorest to produce the API clients.

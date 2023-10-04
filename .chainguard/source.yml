@@ -1,0 +1,27 @@
+spec:
+  authorities:
+    - keyless:
+        identities:
+          - issuer: https://accounts.google.com
+            subjectRegExp: .*@konghq.com$
+          - issuer: https://github.com/login/oauth
+            subjectRegExp: .*@konghq.com$
+          - subject: voigtjr@gmail.com
+          - subject: hans.huebner@gmail.com
+          - subject: wangxiaochen0@gmail.com
+          - subject: thijs@thijsschreijer.nl
+          - subject: dndx@idndx.com
+          - subject: fffonion@gmail.com
+          - subject: windmgc@gmail.com
+          - subject: flrgh@protonmail.com
+          - subject: samuele8@gmail.com
+          - subject: chrono_cpp@me.com
+          - subject: ms2008vip@gmail.com
+          - subject: me@joshuaschmid.com
+          - subject: joshua.schmid@konghq.com
+          - subject: jaiks@posteo.de
+          - subject: junouyang@apache.org
+          - subject: me@addesp.com
+          - subject: liverpool8056@163.com
+    - key:
+        kms: https://github.com/jschmid1.gpg
