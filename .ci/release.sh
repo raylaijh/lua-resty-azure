@@ -29,7 +29,7 @@ while IFS='.' read -ra VERSION_PARTS; do
   export MAJOR_VER=${VERSION_PARTS[0]}
   export MINOR_VER=${VERSION_PARTS[1]}
   export PATCH_VER=${VERSION_PARTS[2]}
-  
+
 done <<< "$CURRENT_VERSION"
 
 echo "> Split... Major: ${MAJOR_VER} | Minor: ${MINOR_VER} | Patch: ${PATCH_VER}"
@@ -91,7 +91,7 @@ echo ">> POSTing rockspec to Luarocks"
 echo ""
 
 curl -f -k -L --silent \
-  --user-agent "lua-resty-aws upload script via curl" \
+  --user-agent "lua-resty-azure upload script via curl" \
   --form "rockspec_file=@lua-resty-azure-$NEXT_VERSION-1.rockspec" \
   --connect-timeout 30 \
   "https://luarocks.org/api/1/$LUAROCKS_TOKEN/upload" \
@@ -133,7 +133,7 @@ echo ">> Uploading rock src to Luarocks"
 echo ""
 
 curl -f -k -L --silent \
-  --user-agent "lua-resty-aws upload script via curl" \
+  --user-agent "lua-resty-azure upload script via curl" \
   --form "rock_file=@lua-resty-azure-$NEXT_VERSION-1.src.rock" \
   --connect-timeout 30 \
   "https://luarocks.org/api/1/$LUAROCKS_TOKEN/upload_rock/$LR_ROCK_VERSION_ID" \
