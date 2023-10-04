@@ -4,3 +4,5 @@ spec:
         kms: https://github.com/web-flow.gpg
     - key:
         kms: https://github.com/gszr.gpg
+    - key:
+        kms: https://github.com/saisatishkarra.gpg
