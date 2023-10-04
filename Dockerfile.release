@@ -4,7 +4,8 @@ ARG KONG_VERSION=latest
 FROM kong:${KONG_VERSION}-alpine
 
 USER root
-RUN apk add --no-cache gcc musl-dev git zip bash jq
+RUN apk add --no-cache gcc musl-dev git zip bash jq curl
+RUN git config --global --add safe.directory /host
 WORKDIR /host
 COPY . .
 
